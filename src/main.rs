@@ -1,3 +1,7 @@
+fn divide(x: f32, y: f32) -> f32 {      // Return type with "->" syntax
+    x/y                                 // Note, no "return" keyword needed
+}
+
 fn print_sth(x: String) {
     println!("{}", x);
 }
@@ -35,4 +39,7 @@ fn main() {
 
     let s: String = "Hello".to_string();
     print_sth(s);
+
+
+    println!("{}", divide(6., 3.));
 }
