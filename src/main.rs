@@ -15,8 +15,17 @@ fn main() {
     // Now here comes something interesting:
     // Rust allows allocating another variable with the same name, that can even have a
     // different type.
-    let x = 42.0;
+    // The compiler will detect if something goes wrong, e.g.:
+    let x: i32 = 42.0;
 
-    // .. and print it
-    println!("Hello, world {}!", x);
+    // Note that we didn't specify any types yet, but I told you before that Rust is
+    // a typed language.
+    // What happens here is type inference. The compiler automatically detects what the
+    // variable type should be (much like "auto" in recent C++ versions)
+
+    // The following won't work, because we are comparing values of different types.
+    // Let's force a type conversion
+    if 3 as f64 == 3.0 { // << Note that there are no brackets here. Rust is kind of minimalistic
+        println!("Hello, world {}!", x);
+    }
 }
