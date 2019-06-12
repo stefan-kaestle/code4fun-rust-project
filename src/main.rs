@@ -1,3 +1,7 @@
+fn print_sth(x: String) {
+    println!("{}", x);
+}
+
 fn main() {
 
     // Let's add a variable
@@ -16,7 +20,7 @@ fn main() {
     // Rust allows allocating another variable with the same name, that can even have a
     // different type.
     // The compiler will detect if something goes wrong, e.g.:
-    let x: i32 = 42.0;
+    let x: i32 = 42;
 
     // Note that we didn't specify any types yet, but I told you before that Rust is
     // a typed language.
@@ -28,4 +32,7 @@ fn main() {
     if 3 as f64 == 3.0 { // << Note that there are no brackets here. Rust is kind of minimalistic
         println!("Hello, world {}!", x);
     }
+
+    let s: String = "Hello".to_string();
+    print_sth(s);
 }
