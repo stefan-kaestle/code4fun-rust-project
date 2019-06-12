@@ -1,3 +1,24 @@
+use std::fs::File;
+use std::io::{BufReader, BufRead};
+
+fn read_file() -> std::io::Result<()> {
+    let f = File::open("foo.txt")?;
+    let f = BufReader::new(f);
+
+    let mut i = 0;
+
+    for line in f.lines() {
+        let line = line?;
+
+        if i < 10 {
+            println!("{}", line);
+            i += 1;
+        }
+    }
+
+    Ok(())
+}
+
 fn divide(x: f32, y: f32) -> Result<f32, String> {      // Return type with "->" syntax
     if y == 0. {
         Err("Don't feel like dividing by 0".to_string())
@@ -52,4 +73,5 @@ fn main() {
         Err(t) => eprintln!("Failed to divide! Error: {}", t)
     }
 
+    read_file().expect("Could not read file");
 }
