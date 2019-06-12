@@ -1,20 +1,24 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
+use regex::Regex;
+
 fn read_file() -> std::io::Result<()> {
     let f = File::open("foo.txt")?;
     let f = BufReader::new(f);
 
     let mut i = 0;
+    let re = Regex::new(r"Benutzer").expect("Malformed regular expression");
 
     for line in f.lines() {
         let line = line?;
 
-        if i < 10 {
-            println!("{}", line);
+        if re.is_match(&line) {
             i += 1;
         }
     }
+
+    println!("Matches: {} lines", i);
 
     Ok(())
 }
