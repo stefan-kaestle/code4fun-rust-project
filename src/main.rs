@@ -46,5 +46,10 @@ fn main() {
 
 
     println!("{}", divide(6., 3.).unwrap());
-    println!("{}", divide(6., 0.).unwrap());
+
+    match divide(6.0, 0.0) {
+        Ok(v) => println!("{}", v),
+        Err(t) => eprintln!("Failed to divide! Error: {}", t)
+    }
+
 }
