@@ -1,5 +1,9 @@
-fn divide(x: f32, y: f32) -> f32 {      // Return type with "->" syntax
-    x/y                                 // Note, no "return" keyword needed
+fn divide(x: f32, y: f32) -> Result<f32, String> {      // Return type with "->" syntax
+    if y == 0. {
+        Err("Don't feel like dividing by 0".to_string())
+    } else {
+        Ok(x/y)
+    }
 }
 
 fn print_sth(x: String) {
@@ -41,5 +45,6 @@ fn main() {
     print_sth(s);
 
 
-    println!("{}", divide(6., 3.));
+    println!("{}", divide(6., 3.).unwrap());
+    println!("{}", divide(6., 0.).unwrap());
 }
