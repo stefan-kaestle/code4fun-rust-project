@@ -31,7 +31,7 @@ fn divide(x: f32, y: f32) -> Result<f32, String> {      // Return type with "->"
     }
 }
 
-fn print_sth(x: String) {
+fn print_sth(x: &String) {
     println!("{}", x);
 }
 
@@ -67,8 +67,9 @@ fn main() {
     }
 
     let s: String = "Hello".to_string();
-    print_sth(s);
-
+    let r = &s;
+    print_sth(r);
+    print_sth(r);
 
     println!("{}", divide(6., 3.).unwrap());
 
