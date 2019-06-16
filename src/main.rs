@@ -1,5 +1,7 @@
 use std::fs::File;
 use std::io::{BufReader, BufRead};
+use std::thread;
+use std::sync::Arc;
 
 use regex::Regex;
 
@@ -69,7 +71,23 @@ fn main() {
     let s: String = "Hello".to_string();
     let r = &s;
     print_sth(r);
-    print_sth(r);
+
+    let handle = {
+        let snd_r = Arc::new("Hello world".to_string());
+        let thr_r = snd_r.clone();
+
+        thread::spawn(move || {
+            thread::sleep(std::time::Duration::from_secs(5));
+
+            // Thanks to the sleep above, this printf will be executed AFTER the original Arc goes out of scope
+            println!("From thread: {}", thr_r);
+        })
+
+        // snd_r is droppped (freed) here
+    };
+
+    handle.join().unwrap();
+
 
     println!("{}", divide(6., 3.).unwrap());
 
