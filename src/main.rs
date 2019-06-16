@@ -5,6 +5,13 @@ use std::sync::Arc;
 
 use regex::Regex;
 
+use diesel::prelude::*;
+use diesel::mysql::MysqlConnection;
+use dotenv::dotenv;
+use std::env;
+
+use code4fun::models::*;
+
 fn read_file() -> std::io::Result<()> {
     let f = File::open("foo.txt")?;
     let f = BufReader::new(f);
@@ -37,64 +44,17 @@ fn print_sth(x: &String) {
     println!("{}", x);
 }
 
+fn get_employees()
+{
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let conn = MysqlConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url));
+
+    println!("Connection to {} successfully established", database_url);
+}
+
 fn main() {
 
-    // Let's add a variable
-    let mut x = 5;
-
-    // Re-assigning a value does not work, we need to add the "mut" keyword
-    // Check out the compiler error - it's really helpful
-    x = 6;
-
-    // You will see later why the distinction between read/write accesses to variables
-    // is so important to Rust and how it is used for thread safety.
-    // It allows some extra checks the compiler does that you wouldn't be getting in
-    // languages like C++ or Java
-
-    // Now here comes something interesting:
-    // Rust allows allocating another variable with the same name, that can even have a
-    // different type.
-    // The compiler will detect if something goes wrong, e.g.:
-    let x: i32 = 42;
-
-    // Note that we didn't specify any types yet, but I told you before that Rust is
-    // a typed language.
-    // What happens here is type inference. The compiler automatically detects what the
-    // variable type should be (much like "auto" in recent C++ versions)
-
-    // The following won't work, because we are comparing values of different types.
-    // Let's force a type conversion
-    if 3 as f64 == 3.0 { // << Note that there are no brackets here. Rust is kind of minimalistic
-        println!("Hello, world {}!", x);
-    }
-
-    let s: String = "Hello".to_string();
-    let r = &s;
-    print_sth(r);
-
-    let handle = {
-        let snd_r = Arc::new("Hello world".to_string());
-        let thr_r = snd_r.clone();
-
-        thread::spawn(move || {
-            thread::sleep(std::time::Duration::from_secs(5));
-
-            // Thanks to the sleep above, this printf will be executed AFTER the original Arc goes out of scope
-            println!("From thread: {}", thr_r);
-        })
-
-        // snd_r is droppped (freed) here
-    };
-
-    handle.join().unwrap();
-
-
-    println!("{}", divide(6., 3.).unwrap());
-
-    match divide(6.0, 0.0) {
-        Ok(v) => println!("{}", v),
-        Err(t) => eprintln!("Failed to divide! Error: {}", t)
-    }
-
-    read_file().expect("Could not read file");
+    get_employees();
 }
