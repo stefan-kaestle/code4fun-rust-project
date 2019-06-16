@@ -7,8 +7,6 @@ use regex::Regex;
 
 use diesel::prelude::*;
 use diesel::mysql::MysqlConnection;
-use dotenv::dotenv;
-use std::env;
 
 use code4fun::models::*;
 
@@ -44,14 +42,18 @@ fn print_sth(x: &String) {
     println!("{}", x);
 }
 
-fn get_employees()
-{
-    dotenv().ok();
+fn get_employees() {
+    use code4fun::schema::employees::dsl::*;
+    let conn = code4fun::get_employees();
 
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let conn = MysqlConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url));
+    let results = employees.limit(5)
+        .load::<Employees>(&conn)
+        .expect("Could not load employees");
 
-    println!("Connection to {} successfully established", database_url);
+    for r in &results {
+        println!("{} {}", r.first_name, r.last_name);
+        println!("{:?}", r);
+    }
 }
 
 fn main() {
