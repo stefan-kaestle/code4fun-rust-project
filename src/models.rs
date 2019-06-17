@@ -2,7 +2,7 @@ use chrono::NaiveDate;
 use diesel::mysql::types::Datetime;
 use diesel::sql_types::Date;
 
-#[derive(Queryable,Debug)]
+#[derive(Queryable,Debug,Serialize)]
 pub struct Employees {
     pub emp_no: i32,
     pub birth_date: NaiveDate,
