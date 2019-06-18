@@ -7,6 +7,8 @@ use regex::Regex;
 
 use diesel::prelude::*;
 
+use dotenv::dotenv;
+
 use actix_web::{App, HttpRequest, web::Json, Result, http::Method, web::resource, web, HttpServer, middleware};
 
 use code4fun::models::*;
@@ -80,6 +82,7 @@ fn index() -> String {
 }
 
 fn main() -> std::io::Result<()> {
+    dotenv().expect("unable to parse .env");
 
     // Probably we can enable this via env variables
     std::env::set_var("RUST_LOG", "actix_web=info");
