@@ -40,7 +40,7 @@ struct MyObj {
 
 fn complex(_req: HttpRequest) -> Result<Json<MyObj>> {
     println!("Handling request");
-    Ok(Json(MyObj{name: "Hello world".to_string()})) //req.match_info().query("name")?}))
+    Ok(Json(MyObj{name: "Hello world".to_string()}))
 }
 
 
@@ -69,12 +69,7 @@ fn get_employees(_req: HttpRequest) -> Result<Json<Vec<Employees>>> {
         println!("{:?}", r);
     }
 
-//    Ok(Json(results));
-//    format!("Hello world");
     Ok(Json(results))
-//    Ok(Json(vec![MyObj{name: "Hello world".to_string()}])) //req.match_info().query("name")?}))
-
-
 }
 
 fn index() -> String {
