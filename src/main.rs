@@ -13,18 +13,25 @@ use actix_web::{App, HttpRequest, web::Json, Result, http::Method, web::resource
 
 use code4fun::models::*;
 
-fn read_file() -> std::io::Result<()> {
+fn read_file(_req: HttpRequest) -> Result<Json<Vec<String>>> {
     let f = File::open("foo.txt")?;
     let f = BufReader::new(f);
 
     let mut i = 0;
     let re = Regex::new(r"Benutzer").expect("Malformed regular expression");
 
+    let mut res: Vec<String> = Vec::new();
+
     for line in f.lines() {
         let line = line?;
 
         if re.is_match(&line) {
             i += 1;
+
+            // Return the first 1000 matches to the user
+            if res.len() < 1000 {
+                res.push(line);
+            }
         }
     }
 
@@ -83,11 +90,16 @@ fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
+    let address = "[::]:8080";
+    println!("Starting webserver at: {}", address);
+
     HttpServer::new(|| {
         App::new()
             .wrap(middleware::Logger::default())
             .service(resource("/").route(web::get().to(get_employees)))
+            .service(resource("/db").route(web::get().to(get_employees)))
+            .service(resource("/file").route(web::get().to(read_file)))
     })
-        .bind("[::]:8080")?
+        .bind(address)?
         .run()
 }
