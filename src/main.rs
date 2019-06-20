@@ -1,5 +1,3 @@
-#[macro_use] extern crate serde_derive;
-
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
@@ -9,7 +7,7 @@ use diesel::prelude::*;
 
 use dotenv::dotenv;
 
-use actix_web::{App, HttpRequest, web::Json, Result, http::Method, web::resource, web, HttpServer, middleware};
+use actix_web::{App, HttpRequest, web::Json, Result, web::resource, web, HttpServer, middleware};
 
 use code4fun::models::*;
 
@@ -37,19 +35,8 @@ fn read_file(_req: HttpRequest) -> Result<Json<Vec<String>>> {
 
     println!("Matches: {} lines", i);
 
-    Ok(())
+    Ok(Json(res))
 }
-
-#[derive(Serialize)]
-struct MyObj {
-    name: String,
-}
-
-fn complex(_req: HttpRequest) -> Result<Json<MyObj>> {
-    println!("Handling request");
-    Ok(Json(MyObj{name: "Hello world".to_string()}))
-}
-
 
 fn divide(x: f32, y: f32) -> Result<f32, String> {      // Return type with "->" syntax
     if y == 0. {
@@ -57,10 +44,6 @@ fn divide(x: f32, y: f32) -> Result<f32, String> {      // Return type with "->"
     } else {
         Ok(x/y)
     }
-}
-
-fn print_sth(x: &String) {
-    println!("{}", x);
 }
 
 fn get_employees(_req: HttpRequest) -> Result<Json<Vec<Employees>>> {
@@ -79,12 +62,10 @@ fn get_employees(_req: HttpRequest) -> Result<Json<Vec<Employees>>> {
     Ok(Json(results))
 }
 
-fn index() -> String {
-    format!("Hello world")
-}
-
 fn main() -> std::io::Result<()> {
     dotenv().expect("unable to parse .env");
+
+    divide(5.0, 1.0).unwrap();
 
     // Probably we can enable this via env variables
     std::env::set_var("RUST_LOG", "actix_web=info");
